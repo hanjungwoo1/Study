@@ -368,6 +368,12 @@ std::optional<std::string> LoadTextFile(const std::string& filename) {
     - 입력된 파일명으로부터 인스턴스 생성이 실패하면 메모리할당 해제
     - C++11 smart pointer 활용
 
+</details>
+
+## 03-02: 스마트 포인터와 클래스 디자인
+
+<details>
+<summary>Click</summary>
 
 ### Smart Pointer
 
@@ -467,6 +473,7 @@ private:
 
 ### Shader 클래스 구현
 
+- src/shader.cpp
 - CreateFromFile() 구현
 ```C++
 #include "shader.h"
@@ -477,7 +484,14 @@ ShaderUPtr Shader::CreateFromFile(const std::string& filename, GLenum shaderType
         return nullptr;
     return std::move(shader);
 }
+```
 
+
+- 소멸자 ~Shader 구현
+    - m_shader는 처음에 0으로 초기화
+    - m_shader에 0이 아닌 다른 값이 들어가 있다면 glDeleteShader()를 호출하여 shader object 제거
+
+```C++
 Shader::~Shader() {
   if (m_shader) {
     glDeleteShader(m_shader);
@@ -522,9 +536,88 @@ bool Shader::LoadFile(const std::string& filename, GLenum shaderType) {
 }
 ```
 
+### Shader 클래스 테스트
 
-- src/shader.cpp
+- Shader 클래스 생성 및 shader 코드 컴파일 테스트
+- src/main.cpp에서 GLAD 초기화 이후 아래 코드를 추가하여 테스트
 
+```C++
+auto vertexShader = Shader::CreateFromFile("./shader/simple.vs", GL_VERTEX_SHADER);
+auto fragmentShader = Shader::CreateFromFile("./shader/simple.fs", GL_FRAGMENT_SHADER);
+SPDLOG_INFO("vertex shader id: {}", vertexShader->Get());
+SPDLOG_INFO("fragment shader id: {}", fragmentShader->Get());
+```
+
+### VSCODE GLSL EXTENSION
+
+- Extension 탭에서 shader로 검색
+- Shader languages support for VS Code 설치
+    - glsl 코드 syntax highlight
+
+### VERTEX SHADER CODE
+- 가장 단순한 vertex shader 작성
+- shader/simple.vs
+
+```C++
+#version 330 core
+layout (location = 0) in vec3 aPos;
+
+void main() {
+  gl_Position = vec4(0.0, 0.0, 0.0, 1.0);
+}
+```
+
+### FRAGMENT SHADER CODE
+- 가장 단순한 fragment shader 작성
+- shader/simple.fs
+
+```C++
+#version 330 core
+out vec4 fragColor;
+
+void main() {
+  fragColor = vec4(1.0, 0.0, 0.0, 1.0);
+}
+```
+
+### 빌드 세팅
+- CMakeLists.txt에 방금 작성한 파일들을 추가
+
+```text
+add_executable(${PROJECT_NAME}
+  src/main.cpp
+  src/common.cpp src/common.h
+  src/shader.cpp src/shader.h
+  )
+```
+
+
+### OpenGL Remarks
+
+- glCreateShader(): OpenGL shader object 생성
+- glShaderSource(): shader에 소스 코드 설정
+- glCompileShader(): shader 컴파일
+
+- glGetShaderiv(): shader에 대한 정수형 정보를 얻어옴
+- glGetShaderInfoLog(): shader에 대한 로그를 얻어옴. 컴파일 에러 얻어내는 용도로 사용
+- glDeleteShader(): shader object 제거
+
+
+</details>
+
+## 03-03 Program과 화면에 점찍기
+
+<details>
+<summary>Click</summary>
+
+### PROGRAM CLASS DESIGN
+
+- Program 클래스 설계
+    - vertex shader, fragment shader를 연결한 pipeline program
+    - 이 program을 이용해서 최종적으로 그림을 그린다
+    - 두 개의 shader를 입력 받아서 program을 링크시킨다 -> 함수
+    - 싱크에 성공하면 OpenGL program object를 생성
+    - 실패하면 메모리 할당 해제
 
 
 </details>
