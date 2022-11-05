@@ -619,5 +619,119 @@ add_executable(${PROJECT_NAME}
     - 싱크에 성공하면 OpenGL program object를 생성
     - 실패하면 메모리 할당 해제
 
+```C++
+
+#ifndef __PROGRAM_H__
+#define __PROGRAM_H__
+
+#include "common.h"
+#include "shader.h"
+
+CLASS_PTR(Program)
+class Program {
+public:
+    static ProgramUPtr Create(
+        const std::vector<ShaderPtr>& shaders);
+
+    ~Program();
+    uint32_t Get() const { return m_program; }    
+private:
+    Program() {}
+    bool Link(
+        const std::vector<ShaderPtr>& shaders);
+    uint32_t m_program { 0 };
+};
+
+#endif // __PROGRAM_H__
+```
+
+
+- 이렇게 설계된 이유
+    - vertex, fragment shader 외에 여러 개의 Shader를 링크할 수도 있게 함
+    - Shader 인스턴스 인자는 필요하지만 소유할 필요는 없음
+    - Shader 인스턴스는 다른 Program 인스턴스를 만드는 데 재사용할 수도 있음
+    - 따라서 shared pointer를 사용: ShaderPtr
+
+### Program 클래스 구현
+
+```C++
+#include "program.h"
+
+ProgramUPtr Program::Create(
+  const std::vector<ShaderPtr>& shaders) {
+  auto program = ProgramUPtr(new Program());
+  if (!program->Link(shaders))
+    return nullptr;
+  return std::move(program);
+}
+
+Program::~Program() {
+  if (m_program) {
+    glDeleteProgram(m_program);
+  }
+}
+```
+
+- Link() 구현
+    - glCreateProgram()으로 새로운 OpenGL program object 생성
+    - glAttachShader()로 program에 shader를 붙이기
+    - glLinkProgram()으로 program 링크
+    - glGetProgramiv()로 프로그램 링크 상태 확인
+    - 링크에 실패했다면 glGetProgramInfoLog()로 에러 로그 가져오기
+
+```C++
+bool Program::Link(
+  const std::vector<ShaderPtr>& shaders) {
+  m_program = glCreateProgram();
+  for (auto& shader: shaders)
+      glAttachShader(m_program, shader->Get());
+  glLinkProgram(m_program);
+
+  int success = 0;
+  glGetProgramiv(m_program, GL_LINK_STATUS, &success);
+  if (!success) {
+      char infoLog[1024];
+      glGetProgramInfoLog(m_program, 1024, nullptr, infoLog);
+      SPDLOG_ERROR("failed to link program: {}", infoLog);
+      return false;
+  }
+  return true;
+}
+```
+
+### Program 클래스 테스트
+
+- src/main.cpp에 program.h 포함
+- src/main.cpp에서 Shader 인스턴스 생성 후 Program 인스턴스 생성
+    - Shader 인스턴스가 unique_ptr에서 shared_ptr로 변환되었음을 유의
+
+```C++
+ShaderPtr vertShader = Shader::CreateFromFile("./shader/simple.vs", GL_VERTEX_SHADER);
+ShaderPtr fragShader = Shader::CreateFromFile("./shader/simple.fs", GL_FRAGMENT_SHADER);
+SPDLOG_INFO("vertex shader id: {}", vertShader->Get());
+SPDLOG_INFO("fragment shader id: {}", fragShader->Get());
+
+auto program = Program::Create({fragShader, vertShader});
+SPDLOG_INFO("program id: {}", program->Get());
+```
+
+### OPENGL REMARKS
+
+- glCreateProgram(): OpenGL program object 생성
+- glAttachShader(): program에 shader를 붙이기
+- glLinkProgram(): program 링크
+- glGetProgramiv(): program에 대한 정수형 정보를 얻어옴
+- glGetProgramInfoLog(): program에 대한 로그를 얻어옴. 링크 에러 얻어내는 용도로 사용
+- glDeleteProgram(): program object 제거
+
+### 리팩토링
+
+- 프로그램 라이프사이클을 고려하여 코드 리팩토링
+    - GLFW / OpenGL Context / GLAD 초기화
+    - 그림을 그리기 위한 OpenGL objects 생성 (shader / program)
+    - 렌더링
+    - OpenGL objects 제거
+    - GLFW 종료 / 프로그램 종료
+- OpenGL object 들을 관리하고 렌더링하는 코드를 분리하자
 
 </details>
