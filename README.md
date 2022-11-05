@@ -167,3 +167,105 @@ int main(int argc, const char** argv) {
     - GL/GLES Loader-Generator
         - OpenGL은 spec과 구현체(diver, dll)가 따로 존재
         - OpenGL 함수를 사용하기 전에 해당함수들의 구현체가 어디 있는지 로딩하는 과정이 필요
+
+```
+# glad
+ExternalProject_Add(
+    dep_glad
+    GIT_REPOSITORY "https://github.com/Dav1dde/glad"
+    GIT_TAG "v0.1.34"
+    GIT_SHALLOW 1
+    UPDATE_COMMAND ""
+    PATCH_COMMAND ""
+    CMAKE_ARGS
+        -DCMAKE_INSTALL_PREFIX=${DEP_INSTALL_DIR}
+        -DGLAD_INSTALL=ON
+    TEST_COMMAND ""
+    )
+set(DEP_LIST ${DEP_LIST} dep_glad)
+set(DEP_LIBS ${DEP_LIBS} glad)
+```
+
+```C++
+glfwWindowHint(GLFW_CONTEXT_VERSION_MAJOR, 3);
+glfwWindowHint(GLFW_CONTEXT_VERSION_MINOR, 3);
+glfwWindowHint(GLFW_OPENGL_PROFILE, GLFW_OPENGL_CORE_PROFILE);
+```
+
+
+```C++
+#include <glad/glad.h>
+
+glfwMakeContextCurrent(window);
+
+
+// glad를 활용한 OpenGL 함수 로딩
+if (!gladLoadGLLoader((GLADloadproc)glfwGetProcAddress)) {
+    SPDLOG_ERROR("failed to initialize glad");
+    glfwTerminate();
+    return -1;
+}
+auto glVersion = glGetString(GL_VERSION);
+SPDLOG_INFO("OpenGL context version: {}", glVersion); // 오류
+```
+
+
+### GLFW CALLBACKS
+
+- GLFW로 생성된 윈도우에 특정 이벤트가 발생했을 때 실행되는 콜백함수 지정
+    - 윈도우의 크기가 변경
+    - 윈도우에 마우스 입력
+    - 윈도우에 키보드 입력
+    - 기타 등등..
+- glfwXXXXCallback()의 함수 프로토타입을 가지고 있음
+
+- 윈도우의 프레임버퍼 크기가 변경되었을 때 호출하기 위한 콜백 정의
+- glViewport():OpenGL이 그림을 그릴 영역 지정
+
+```C++
+void OnFramebufferSizeChange(GLFWwindow* window, int width, int height) {
+    SPDLOG_INFO("framebuffer size changed: ({} x {})", width, height);
+    glViewport(0, 0, width, height);
+}
+```
+
+
+```C++
+void OnKeyEvent(GLFWwindow* window,
+    int key, int scancode, int action, int mods) {
+    SPDLOG_INFO("key: {}, scancode: {}, action: {}, mods: {}{}{}",
+        key, scancode,
+        action == GLFW_PRESS ? "Pressed" :
+        action == GLFW_RELEASE ? "Released" :
+        action == GLFW_REPEAT ? "Repeat" : "Unknown",
+        mods & GLFW_MOD_CONTROL ? "C" : "-",
+        mods & GLFW_MOD_SHIFT ? "S" : "-",
+        mods & GLFW_MOD_ALT ? "A" : "-");
+    if (key == GLFW_KEY_ESCAPE && action == GLFW_PRESS) {
+        glfwSetWindowShouldClose(window, true);
+    }
+}
+```
+
+```C++
+OnFramebufferSizeChange(window, WINDOW_WIDTH, WINDOW_HEIGHT);
+```
+
+### 렌더링 코드
+
+```C++
+void Render() {
+    glClearColor(0.1f, 0.2f, 0.3f, 0.0f);
+    glClear(GL_COLOR_BUFFER_BIT);
+}
+```
+
+
+### FRAMEBUFFER SWAP(Double Buffering)
+
+- 화면에 그림을 그리는 과정
+    - 프레임버퍼 2개를 준비(front/back)
+    - back buffer에 그림 그리기
+    - front와 back을 바꿔치기
+    - 위의 과정 반복
+- 그림이 그려지는 과정이 노출되지 않도록 해줌
