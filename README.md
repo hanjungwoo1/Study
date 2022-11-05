@@ -303,6 +303,8 @@ void Render() {
 
 ## 03-01: 그래픽스 파이프라인
 
+<details>
+<summary>Click</summary>
 
 ### Graphics Pipeline
 
@@ -315,8 +317,26 @@ void Render() {
         Application : 애플리케이션 프로그램 영역. OpenGL 함수 호출
         Geometry, Rasterization, Pixel : GPU 영역
 
+### Programmable Shader
+- Shader : 각 파이프라인 단계마다 GPU상에서 실행 되는 작은 프로그램
+- GLSL(GL Shading Language)라는 C기반 프로그래밍 언어로 작성
 
-### Application
+ VERTAX DATA[] -> VERTEX SHADER -> SHAPE ASSEMBLE -> GEOMETRY SHADER -> RSTERIZATION -> FRAGMENT SHADER -> TEST AND BLENDING
+
+### OPENGL SHADER
+
+- OpenGL은 그림을 그려내기 위해 두 개의 SHADER가 반드시 필요
+    - Vertex Shader
+    - Fragment Shader
+- Shader 코드는 OpenGL 코드 내에서 빌드 / 로딩됨
+- 미리 빌드한 뒤 로딩하는 방법 : SPIR-V 이용
+    - 이번 수업에서는 다루지 않을 예정
+
+### SHADER CODE LOADING
+- 임의의 shader 파일을 읽는다
+- shader 오브젝트를 만들고 shader 읽어들인 shader 코드를 세팅한다
+- shader를 컴파일한다
+- shader 컴파일 결과가 실패했다면 에러를 레포팅한다
 
 
-### Geometry Processing
+</details>
