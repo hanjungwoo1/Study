@@ -1,9 +1,6 @@
-#include <iostream>
-
+#include <spdlog/spdlog.h>
 
 int main(int argc, const char** argv){
-    std::cout << "hello, world" << std::endl;
-    std::cout << "hello, openGL" << std::endl;
+    SPDLOG_INFO("Hello, opengl");
     return 0;
-
 }
