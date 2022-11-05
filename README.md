@@ -312,8 +312,8 @@ void Render() {
 - Pixel Processing : 픽셀 단위의 처리. 픽셀 색상의 결정 (pixel to screen)
 
 
-    Application : 애플리케이션 프로그램 영역. OpenGL 함수 호출
-    Geometry, Rasterization, Pixel : GPU 영역
+        Application : 애플리케이션 프로그램 영역. OpenGL 함수 호출
+        Geometry, Rasterization, Pixel : GPU 영역
 
 
 ### Application
