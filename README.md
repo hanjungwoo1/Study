@@ -158,3 +158,12 @@ int main(int argc, const char** argv) {
     return 0;
 }
 ```
+
+## 02-03
+
+### GLAD DEPENDENCY 추가하기
+
+- GLAD
+    - GL/GLES Loader-Generator
+        - OpenGL은 spec과 구현체(diver, dll)가 따로 존재
+        - OpenGL 함수를 사용하기 전에 해당함수들의 구현체가 어디 있는지 로딩하는 과정이 필요
