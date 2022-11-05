@@ -1,4 +1,6 @@
 #include "common.h"
+#include "shader.h"
+
 #include <glad/glad.h>
 #include <glfw/glfw3.h>
 #include <spdlog/spdlog.h>
@@ -62,6 +64,12 @@ int main(int argc, const char** argv) {
     SPDLOG_INFO("OpenGL context version:");
     //SPDLOG_INFO("OpenGL context version: {}", glVersion); -> 오류 ???
 
+    auto vertexShader = Shader::CreateFromFile("./shader/simple.vs", GL_VERTEX_SHADER);
+    auto fragmentShader = Shader::CreateFromFile("./shader/simple.fs", GL_FRAGMENT_SHADER);
+    SPDLOG_INFO("vertex shader id: {}", vertexShader->Get());
+    SPDLOG_INFO("fragment shader id: {}", fragmentShader->Get());
+
+ 
     OnFramebufferSizeChange(window, WINDOW_WIDTH, WINDOW_HEIGHT); // 함수 명시적 호출
     glfwSetFramebufferSizeCallback(window, OnFramebufferSizeChange);
     glfwSetKeyCallback(window, OnKeyEvent);

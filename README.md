@@ -339,4 +339,192 @@ void Render() {
 - shader 컴파일 결과가 실패했다면 에러를 레포팅한다
 
 
+### TEXT FILE LOADING
+- optional<>
+    - C++17부터 사용 가능한 표준 라이브러리
+    - 어떤 값이 있거나 없는 경우를 포인터 없이 표현 가능
+
+```C++
+#include "common.h"
+#include <fstream>
+#include <sstream>
+
+std::optional<std::string> LoadTextFile(const std::string& filename) {
+    std::ifstream fin(filename);
+    if (!fin.is_open()) {
+        SPDLOG_ERROR("failed to open file: {}", filename);
+        return {};
+    }
+    std::stringstream text;
+    text << fin.rdbuf();
+    return text.str();
+}
+```
+### SHADER CLASS DESIGN
+
+- Shader 클래스 설계
+    - OpenGL shader object를 가지고 있다
+    - 인스턴스가 생성될 때 로딩할 파일명을 받자
+    - 입력된 파일명으로부터 인스턴스 생성이 실패하면 메모리할당 해제
+    - C++11 smart pointer 활용
+
+
+### Smart Pointer
+
+- Smart Pointer
+    - C++11 부터 사용 가능한 좀 더 안전한 포인터
+    - 메모리 할당을 받을 때 소유권에 대한 정보가 있다
+    - 명시적인 delete 구문이 필요없다
+    - std::unique_ptr<>: 해당 메모리 블록을 단독으로 소유
+    - std::shared_ptr<>: 해당 메모리 블록의 소유권을 공유
+    - std::weak_ptr<>: 해당 메모리 소유권은 없지만 접근은 가능
+
+
+- 일반 포인터를 이용하는 경우: 메모리를 두번 해제하면 문제 발생
+```C++
+{
+  int* a = new int;
+  int* b = a;
+
+  // ...
+
+  delete a;
+  delete b; // 두 번 메모리를 해제하여 문제 발생
+}
+```
+
+- unique_ptr<>를 사용하는 경우: 소유권을 가진 인스턴스가 스코프 밖으로 벗어났을때 메모리 자동 해제
+```C++
+{
+  std::unique_ptr<int> a = std::make_unique();
+  int* b = a.get();
+
+  // ...
+}
+
+```
+
+- unique_ptr<>를 사용하는 경우: 소유권을 가진 인스턴스가 일반적인 방법으로 다른 쪽에 소유권을 이전하려는 경우 에러 발생
+```C++
+{
+  // 컴파일 에러 > 런타임 에러 -> 실수 막아줌
+  std::unique_ptr<int> a = std::make_unique();
+  std::unique_ptr<int> b = a; // error 발생
+
+  // ...
+}
+```
+
+- unique_ptr<>를 사용하는 경우: std::move() 함수를 사용해서 명시적으로 소유권 이전 가능. 대신 이전에 소유권을 가진 인스턴스는 nullptr를 갖게됨
+```C++
+{
+  std::unique_ptr<int> a = std::make_unique();
+  std::unique_ptr<int> b = std::move(a); // 이후 a는 null pointer
+
+  // a는 nullptr가 되어 더이상 사용 불가능
+}
+```
+
+### Shader 클래스 설계
+
+- src/common.h에 다음 매크로를 추가
+    - std::unique_ptr 대신 클래스이름UPtr 사용
+```C++
+#define CLASS_PTR(klassName) \
+class klassName; \
+using klassName ## UPtr = std::unique_ptr<klassName>; \
+using klassName ## Ptr = std::shared_ptr<klassName>; \
+using klassName ## WPtr = std::weak_ptr<klassName>;
+```
+
+- src/shader.h 생성
+```C++
+#ifndef __SHADER_H__
+#define __SHADER_H__
+
+#include "common.h"
+
+CLASS_PTR(Shader);
+class Shader {
+public:
+    static ShaderUPtr CreateFromFile(const std::string& filename,GLenum shaderType);
+    
+    ~Shader();
+    uint32_t Get() const { return m_shader; }    
+private:
+    Shader() {}
+    bool LoadFile(const std::string& filename, GLenum shaderType);
+    uint32_t m_shader { 0 };
+};
+
+#endif // __SHADER_H__
+```
+
+- 이렇게 설계된 이유
+    - 생성자가 private인 이유: CreateFromFile() 함수 외에 다른 방식의 Shader 인스턴스 생성을 막기 위해서
+    - Get()은 있는데 Set()는 없는 이유: shader 오브젝트의 생성 관리는 Shader 내부에서만 관리
+    - LoadFile()이 bool을 리턴하는 이유: 생성에 실패할 경우 false를 리턴하기 위해서
+
+### Shader 클래스 구현
+
+- CreateFromFile() 구현
+```C++
+#include "shader.h"
+
+ShaderUPtr Shader::CreateFromFile(const std::string& filename, GLenum shaderType) {
+    auto shader = ShaderUPtr(new Shader());
+    if (!shader->LoadFile(filename, shaderType))
+        return nullptr;
+    return std::move(shader);
+}
+
+Shader::~Shader() {
+  if (m_shader) {
+    glDeleteShader(m_shader);
+  }
+}
+```
+
+- LoadFile() 구현
+    - 파일 로딩 실패시 false 리턴
+    - 성공시 로딩된 텍스트 포인터 및 길이 가져오기
+    - glCreateShader()를 이용한 shader 오브젝트 생성
+    - glShaderSource()로 소스코드 입력
+    - glCompileShader()로 shader 컴파일
+    - glGetShaderiv()로 컴파일 상태 조회
+    - 만약에 성공이 아니라면 glGetShaderInfoLog()로 에러 로그 가져오기
+```C++
+bool Shader::LoadFile(const std::string& filename, GLenum shaderType) {
+    auto result = LoadTextFile(filename);
+    if (!result.has_value())
+        return false;
+
+    auto& code = result.value();
+    const char* codePtr = code.c_str();
+    int32_t codeLength = (int32_t)code.length();
+
+    // create and compile shader
+    m_shader = glCreateShader(shaderType);
+    glShaderSource(m_shader, 1, (const GLchar* const*)&codePtr, &codeLength);
+    glCompileShader(m_shader);
+
+      // check compile error
+    int success = 0;
+    glGetShaderiv(m_shader, GL_COMPILE_STATUS, &success);
+    if (!success) {
+        char infoLog[1024];
+        glGetShaderInfoLog(m_shader, 1024, nullptr, infoLog);
+        SPDLOG_ERROR("failed to compile shader: \"{}\"", filename);
+        SPDLOG_ERROR("reason: {}", infoLog);
+        return false;
+    }
+    return true;
+}
+```
+
+
+- src/shader.cpp
+
+
+
 </details>
