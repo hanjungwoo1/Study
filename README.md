@@ -3,6 +3,10 @@
 
 ## 01-02 개발 환경
 
+<details>
+<summary>Click</summary>
+
+
 ### CMAKE의 작동 방식
 - Meta-project description
     - 각 플랫폼 / 선호하는 빌드 방식에 맞는 프로젝트 파일을 생성
@@ -24,7 +28,13 @@ cmake --build build --config Debug
 // Ctrl + F5 -> Debug 
 ```
 
+</details>
+
+
 ## 02-01 Cmake dependency
+
+<details>
+<summary>Click</summary>
 
 ### CMAKE를 이용한 외부라이브러리 사용하기
 
@@ -71,7 +81,13 @@ target_link_libraries(${PROJECT_NAME} PUBLIC ${DEP_LIBS})
 add_dependencies(${PROJECT_NAME} ${DEP_LIST})
 ```
 
+</details>
+
 ## 02-02 CMake dependecy - GLFW
+
+<details>
+<summary>Click</summary>
+
 
 ### GLFW DEPENDENCY 추가하기(1)
 - OpenGL은 3D그래픽을 위한 API일 뿐
@@ -159,7 +175,12 @@ int main(int argc, const char** argv) {
 }
 ```
 
-## 02-03
+</details>
+
+## 02-03: 첫 OpenGL 윈도우
+
+<details>
+<summary>Click</summary>
 
 ### GLAD DEPENDENCY 추가하기
 
@@ -269,3 +290,18 @@ void Render() {
     - front와 back을 바꿔치기
     - 위의 과정 반복
 - 그림이 그려지는 과정이 노출되지 않도록 해줌
+
+
+### 사용한 함수
+- glViewport()
+- glClearColor(R,G,B,X);
+- glClear()
+
+
+</details>
+
+## 03-01: 그래픽스 파이프라인
+
+
+
+
