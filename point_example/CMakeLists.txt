@@ -1,10 +1,10 @@
 cmake_minimum_required(VERSION 3.14)
 
-set(PROJECT_NAME first_opengl_example)
+set(PROJECT_NAME point_example)
 set(CMAKE_CXX_STANDARD 17)
 
 # GLFW로 윈도우를 생성하기
-set(WINDOW_NAME "First OpenGL Example!")
+set(WINDOW_NAME "Point Example!")
 set(WINDOW_WIDTH 960)
 set(WINDOW_HEIGHT 540)
 

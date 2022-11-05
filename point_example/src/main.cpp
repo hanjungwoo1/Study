@@ -1,6 +1,7 @@
-#include <spdlog/spdlog.h>
+#include "common.h"
 #include <glad/glad.h>
-#include <GLFW/glfw3.h>
+#include <glfw/glfw3.h>
+#include <spdlog/spdlog.h>
 
 void OnFramebufferSizeChange(GLFWwindow* window, int width, int height) {
     SPDLOG_INFO("framebuffer size changed: ({} x {})", width, height);
@@ -21,7 +22,6 @@ void OnKeyEvent(GLFWwindow* window,
         glfwSetWindowShouldClose(window, true);
     }
 }
-
 
 int main(int argc, const char** argv) {
     // 시작을 알리는 로그
