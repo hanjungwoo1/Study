@@ -794,7 +794,24 @@ void Context::Render() {
 }
 ```
 
+</details>
 
+
+## 03-04 삼각형 그리기
+
+<details>
+<summary>Click</summary>
+
+
+### 정점 그리기
+- 정점을 3개 입력하여 삼각형을 그려보자
+    - 정점 데이터 준비
+    - Vertex buffer object (VBO) 준비
+    - Vertex buffer object에 정점 데이터 입력
+        - CPU memory 상에 있는 정점 데이터를 GPU로 옮기는 작업
+    - Vertex array object (VAO) 준비
+        - 우리의 정점 데이터의 구조를 알려주는 descriptor object
+    - Program, VBO, VAO를 사용하여 그림 그리기
 
 
 </details>
