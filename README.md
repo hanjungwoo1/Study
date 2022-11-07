@@ -915,3 +915,15 @@ vec4 otherResult = vec4(result.xyz, 1.0);
     - glGetShaderLocation()으로 uniform handle을 얻을 수 있음
     - program이 바인딩된 상태에서 glUniform...()으로 uniform variable 값 설정 가능
     - 필요에 따라 정점 별로 여러 개의 attribute를 설정하여 사용 가능
+
+
+## 05-01 텍스처
+
+### Texture
+
+- 개요
+    - vertex에 color를 지정하는 방법만으로 그럴싸한 3D 물체를 표현하기는 힘들다
+        - 너무 많은 수의 vertex가 필요할 것
+    - Texture
+        - 아이디어: 면에 이미지로된 스티커를 입히자
+        - 저렴한 방식으로 고품질의 렌더링 결과를 생성할 수 있음
