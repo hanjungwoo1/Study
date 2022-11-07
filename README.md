@@ -890,11 +890,28 @@ vec4 otherVec = someVec.xxxx + anotherVec.yxzy;
     - 생성자 사용
     - 다른 벡터를 섞어서 사용 가능
 
+
 ```C
+
 vec2 vect = vec2(0.5, 0.7);
 vec4 result = vec4(vect, 0.0, 0.0);
 vec4 otherResult = vec4(result.xyz, 1.0);
+
 ```
-
-
 </details>
+
+### 정리
+
+- GLSL
+    - C와 비슷한 문법 체계의 shader용 language
+    - 기본적인 수치값 타입 외에 벡터, 행렬 타입이 있음
+    - in, out을 사용하여 각 shader의 입력 출력을 지정
+
+    - vertex shader의 경우 layout을 사용하여 attribute index 지정
+    - vertex shader의 경우 gl_Position을, fragment shader의 경우 픽셀의 최종 색상값을 출력해야 함
+    - vertex shader의 out 변수들은 Rasterization 과정을 거쳐 픽셀단위로 보간되어 fragment shader의 in 변수들로 입력
+
+    - uniform variable을 사용하면 shader에서 사용할 수 있는 global 값을 설정할 수 있음
+    - glGetShaderLocation()으로 uniform handle을 얻을 수 있음
+    - program이 바인딩된 상태에서 glUniform...()으로 uniform variable 값 설정 가능
+    - 필요에 따라 정점 별로 여러 개의 attribute를 설정하여 사용 가능
