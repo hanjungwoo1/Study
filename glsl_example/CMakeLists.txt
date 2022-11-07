@@ -1,6 +1,6 @@
 cmake_minimum_required(VERSION 3.14)
 
-set(PROJECT_NAME triangle_example)
+set(PROJECT_NAME glsl_example)
 set(CMAKE_CXX_STANDARD 17)
 
 # GLFW로 윈도우를 생성하기
