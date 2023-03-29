@@ -54,11 +54,84 @@
 - 알고리즘 : 정렬, 순열, 분할, 콜러블, 오브젝트, 람다 등
 
 ### 1.2.3 수치 연산
+- 무작위수 생성기(난수 생성기) : 최대, 최소 사이에 일련의 무작위수를 생성
+- 생성된 무작위수 분포
+- 로그 함수, 지수 함수, 삼각 함수 등
+
 ### 1.2.4 텍스트 처리
+- std::string : STL알고리즘도 사용 가능
+- std::string_vew : 복사 연산ㄱ이 가볍다, 비소유 레퍼런스
+- 정규표현식
+
 ### 1.2.5 입력과 출력
+- I/O 스트림 라이브러리
+    - 추출 연산자 : >>
+    - 추가 연산자 : <<
+
 ### 1.2.6 멀티 스레딩
+- 어토믹 변수, 스레드 , 락 등
+- **TODO 34p** 
 
 ## 1.3 라이브러리 활용
+1. #include
+2. std 네임스페이스 지정, 글로벌 네임스페이스
+3. 실행 파일 생성을 위해 링커에게 라이브러리
+
 ### 1.3.1 헤더 파일 인클루드하기
+```Cpp
+#include <iostream>
+#include <vector>
+```
 ### 1.3.2 네임스페이스 지정하기
+- 네임스페이스 스포크 지정 연산자 ::
+
+```Cpp
+#include <iostream>
+#include <chrono>
+...
+std::cout << "Hello world:" << std:: endl;
+auto timeNow= std::chrono::system_clock:now();
+```
+#### 짧은 이름 사용하기
+C++ 에서는 using 선언과 using 디렉티브로 이름을 사용할 수 있다
+
+#### using 선언
+using 선언을 사용하면 그 선언문에 적용된 스코프에 이름이 추가 된다.
+
+```cpp
+#include <iostream>
+#include <chrono>
+...
+using std::cout:
+using std::endl;
+using std::chrono::system_clock;
+...
+cout << "Hello world:" << endl; // 비공식 이름
+auto timeNow= now(); // 비공식 이름
+```
+using 선언을 하면 다음과 같은 현상이 발생
+- 한 스코프에 같은 이름을 선언하면 모호한 룩업(lookup)과 이에 따른 컴파일 에러가 발생
+- 상위 스코프에 같은 이름이 선언돼 있으면 using 선언에 의해 가려짐
+
+#### using 디렉티브
+using 디렉티브를 이용하면 네임스페이스 이름을 짧게 사용
+
+```cpp
+#include <iostream>
+#include <chrono>
+...
+using namespace std
+...
+cout << "Hello world:" << endl; // 비공식 이름
+auto timeNow= chrono::system_clock::now(); // 부분 공식 이름
+```
+- 한 스코프에 같은 이름을 선언하면 모호한 룩업과 이에 따른 컴파일 에러가 발생
+- 상위 스코프에 같은 이름이 선언돼 있으면 using선언에 의해 가려짐
+- 다른 네임스페이스에 동일한 이름이 있거나 네임스페이스에 있는 이름이 글로벌 스코프에 있는 이름을 가리면, 모호한 룩업과 이에 따른 컴파일 에러가 발생
+
+**warning**
+- 본의 아니게 로컬에 있는 이름이나 상위 네임스페이스 가림
+- 헤더 파일에서는 using 디렉티브 사용하면 안된다, std에 속한 이름이 모두 드러남
+
 ### 1.3.3 실행 파일 생성하기
+g++ -std=c++14 thread.cpp -o thread -pthread
