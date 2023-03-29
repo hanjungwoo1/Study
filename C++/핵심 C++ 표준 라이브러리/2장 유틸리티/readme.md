@@ -8,7 +8,7 @@
 ### 2.1.2 std::move
 - 컴파일러가 리소스를 이동할 수 있게 해주는 강력한 기능
 - 컴파일러는 소스(arg)를 우측값 참조(rvalue reference)로 변환
-- static_cast<std::remove_reference(delctype(arg)>::type&&>(arg))>
+- static_cast < std::remove_reference(delctype(arg) > ::type&&>(arg))>
 
 ```cpp
 #include <utility>
