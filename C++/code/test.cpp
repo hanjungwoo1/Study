@@ -1,7 +1,5 @@
 #include <iostream>
-#include <list>
-#include <functional>
-
+#include <cstdlib>
 using namespace std;
 #define MAXN (100)
 int N, M;//재료종류수, 가진돈
@@ -12,55 +10,87 @@ int Pm[MAXN + 10];//작은 포장 가격
 int Sv[MAXN + 10];//큰포장 재료 양
 int Pv[MAXN + 10];//큰포장 가격
 
-struct item{
-    int num;
-    int supply;
-    int price;
-};
-
-struct item item_list;
+int answer = 0;
 
 void InputData() {
 	cin >> N >> M;
 	for (int i = 0; i < N; i++) {
 		cin >> X[i] >> Y[i] >> Sm[i] >> Pm[i] >> Sv[i] >> Pv[i];
-        item temp1;
-        item_list[i*2].num = i*2;
-        temp1.supply = Sm[i*2];
-        temp1.price = Pm[i*2];
-        item_list.push_back(temp1);
-
-        item temp2;
-        temp2.num = i*2 + 1;
-        temp2.supply = Sv[i*2 +1];
-        temp2.price = Pv[i*2 + 1];
-
 	}
 }
 
+int get_item_count(int item[]){
+    for(int i = 0; i<N; i++){
+        item[i]  = item[i] / Y[i];
+    }
 
-// void brute_force(int num, int total){
+    for(int i = 0; i<N; i++){
+        for(int j =0; j<N; j++){
+            int temp = abs(item[i]-item[j]);
+            
+            if (temp > 2){
+                return 1;
+            }
+        }
+    }
+    return 0;
+}
 
 
 
-// }
+int buy_item(int money, int item[]){
 
+    if (get_item_count(item) == 1){
+        return 0;
+    }
+
+    for (int i=0; i<N; i++){ // 현재 아이템 확인
+
+        int money_Pm = money - Pm[i];
+        int money_Pv = money - Pv[i];
+
+        if (money_Pm <= 0 || money_Pv <=0){
+            int temp = 1000;
+            for(int i = 0; i < N; i++){
+                int size = item[i] / X[i];
+                
+                if (size < temp){ // 제일 작은 것
+                    temp = size;
+                }
+
+            }       
+            if (answer < temp){  // 제일 큰 것
+                answer = temp;
+            }  
+            return 0; 
+        }
+
+        item[i] = item[i] + Sm[i];
+        buy_item(money_Pm, item);
+        item[i] = item[i] - Sm[i]; // 원상복귀
+
+        item[i] = item[i] + Pv[i];
+        buy_item(money_Pv, item);
+        item[i] = item[i] - Pv[i]; // 원상복귀
+    }
+    
+    return 0;
+}
 
 int main() {
 	ios_base::sync_with_stdio(false);
 	cin.tie(nullptr);
 	cout.tie(nullptr);
-	int ans = -1;
 	InputData();//입력 받는 부분
 	
-    for(auto loop : item_list)
-    {
-        std::cout << loop.num << loop.supply << loop.price << std::endl;
+    int item[N];
+
+    for(int i=0; i<N; i++){
+        item[i] = Y[i];
     }
 
+    buy_item(M, item);
 
-    cout << item_list[0] << endl;
-
-	cout << ans << "\n";//출력 하는 부분
+	cout << answer << "\n";//출력 하는 부분
 	return 0;
 }
