@@ -22,16 +22,19 @@ public:
 
 CString::CString():m_length(0)
 {
+	cout << "construct with nothing" << endl;
 	m_str = new char[m_length + 1];
 }
 CString::CString(const char* str) 
 {
+	cout << "construct with const array" << endl; 
 	m_length=strlen(str);
 	m_str = new char[m_length + 1];
 	strcpy(m_str, str);
 }
 CString::CString(const CString & r) : m_length(r.m_length)
 {
+	cout << "construct with const refer" << endl;
 	m_str = new char[m_length + 1];
 	strcpy(m_str, r.m_str);
 }
