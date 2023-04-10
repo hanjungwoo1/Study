@@ -52,7 +52,7 @@ myVec = std::move(myBigVec); // 이동 의미론
 
 ## 2.3 페어
 - std::pair를 이용하면 원하는(임의의) 타입으로 구성된 쌍을 만듦
-- 클래스 템플릿, <utility>, 복제 생성자와 이동 생성자를 디폴트로 제공
+- 클래스 템플릿, '<'utility'>', 복제 생성자와 이동 생성자를 디폴트로 제공
 - 첫번째 원소 : p.first, std::get<0>(p)
 - 두번째 원소 : p.second, std::get<1>(p)
 
@@ -64,8 +64,8 @@ myVec = std::move(myBigVec); // 이동 의미론
 ## 2.4 튜플
 - 원하는 길이와 타입으로 튜플을 생성
 - 원소가 두개인 Tuple = Pair
-- std::get<i>(t) 로 참조 가능
-- std::get<type>(t)를 이용하면 타입이 type인 원소를 직접 참조
+- std::get'<'i'>'(t) 로 참조 가능
+- std::get'<'type'>'(t)를 이용하면 타입이 type인 원소를 직접 참조
 
 ### 2.4.1 std::make_tuple
 
