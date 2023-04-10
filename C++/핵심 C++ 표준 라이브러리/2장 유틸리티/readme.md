@@ -52,7 +52,7 @@ myVec = std::move(myBigVec); // 이동 의미론
 
 ## 2.3 페어
 - std::pair를 이용하면 원하는(임의의) 타입으로 구성된 쌍을 만듦
-- 클래스 템플릿, '<'utility'>', 복제 생성자와 이동 생성자를 디폴트로 제공
+- 클래스 템플릿, &lt;utility'>', 복제 생성자와 이동 생성자를 디폴트로 제공
 - 첫번째 원소 : p.first, std::get<0>(p)
 - 두번째 원소 : p.second, std::get<1>(p)
 
