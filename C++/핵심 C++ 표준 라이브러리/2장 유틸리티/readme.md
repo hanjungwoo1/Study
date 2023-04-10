@@ -2,13 +2,13 @@
 
 ## 2.1 유용한 함수들
 ### 2.1.1 std::min, std:max, std::minmax
-- <algorithm> : std::min, std::max, std::minmax 값 또는 이니셜라이저 리스트를 입력받아서 결과를 리턴
+- &lt;algorithm&gt; : std::min, std::max, std::minmax 값 또는 이니셜라이저 리스트를 입력받아서 결과를 리턴
 - std::minmax : std::pair로 리턴, (최소, 최대)
 
 ### 2.1.2 std::move
 - 컴파일러가 리소스를 이동할 수 있게 해주는 강력한 기능
 - 컴파일러는 소스(arg)를 우측값 참조(rvalue reference)로 변환
-- static_cast < std::remove_reference(delctype(arg) > ::type&&>(arg))>
+- static_cast &lt; std::remove_reference(delctype(arg) &gt; ::type&&&lt;(arg))&gt;
 
 ```cpp
 #include <utility>
@@ -52,9 +52,9 @@ myVec = std::move(myBigVec); // 이동 의미론
 
 ## 2.3 페어
 - std::pair를 이용하면 원하는(임의의) 타입으로 구성된 쌍을 만듦
-- 클래스 템플릿, &lt;utility'>', 복제 생성자와 이동 생성자를 디폴트로 제공
-- 첫번째 원소 : p.first, std::get<0>(p)
-- 두번째 원소 : p.second, std::get<1>(p)
+- 클래스 템플릿, &lt;utility&gt;, 복제 생성자와 이동 생성자를 디폴트로 제공
+- 첫번째 원소 : p.first, std::get&lt;0&gt;(p)
+- 두번째 원소 : p.second, std::get&lt;1&gt;(p)
 
 ### 2.3.1 std::make_pair
 - 페어를 생성하기 위한 헬퍼 함수
@@ -64,10 +64,18 @@ myVec = std::move(myBigVec); // 이동 의미론
 ## 2.4 튜플
 - 원하는 길이와 타입으로 튜플을 생성
 - 원소가 두개인 Tuple = Pair
-- std::get'<'i'>'(t) 로 참조 가능
-- std::get'<'type'>'(t)를 이용하면 타입이 type인 원소를 직접 참조
+- std::get&lt;i&gt;(t) 로 참조 가능
+- std::get&lt;type&gt;(t)를 이용하면 타입이 type인 원소를 직접 참조
 
 ### 2.4.1 std::make_tuple
+- 튜플을 생성하는 데 헬퍼 함수 std::make_tuple 사용
+- 타입을 따로 지정하지 않아도 컴파일러 자동으로 추론
+- tuple.cpp
+
+### 2.4.2 std::tie와 std::ignore
+- std::tie 원소에 대한 레퍼런스로 튜플을 생성
+- std::ignore 이용하면 튜플의 원소를 명시적으로 무시
+- tupleTie.cpp
 
 ## 2.5 래퍼런스 래퍼
 ## 2.6 스마트 포인터
