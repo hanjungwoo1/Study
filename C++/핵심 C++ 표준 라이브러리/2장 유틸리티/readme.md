@@ -78,6 +78,12 @@ myVec = std::move(myBigVec); // 이동 의미론
 - tupleTie.cpp
 
 ## 2.5 래퍼런스 래퍼
+- type& 오브젝트에 대한 래퍼로서 **복제 생성 가능**, **복제 대입 가능**
+    - 표준 템플릿 라이브러리에 있는 컨테이너에서 사용 가능
+        - std::vector&lt;std::referece_wrapper&lt;int&gt;&gt; myIntRefVector
+    - std::reference_wrapper 오브젝트를 가진 클래스 인스턴스를 복제, 일반 레퍼런스는 불가능
+- referenceWrapperCallable.cpp
+
 ## 2.6 스마트 포인터
 ## 2.7 타임 트레이트
 ## 2.8 시간 라이브러리

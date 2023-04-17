@@ -25,13 +25,28 @@
         - 원소 삭제 불가능
 - containerConstructor.cpp    
 
-
-### 3.1.1
-
 ## 3.2 크기
+- empty() : 컨테이너가 비어 있는지 확인
+- size() : 현재 원소의 개수
+- max_size() : 담을 수 있는 원소의 최대 개수
+- containerSize.cpp
 
 ## 3.3 접근
+|반복자|설명|
+|------|---|
+|begin()과 end()|정방향 반복자 쌍|
+|cbegin()과 cend()|정방향 고정(const) 반복자 쌍|
+|rbegin()과 rend()|역방향 반복자 쌍|
+|crbegin()과 crend()|역방향 고정 반복자 쌍|
+- containerAccess.cpp
 
 ## 3.4 대입과 맞바꾸기
+- 새로 대입 : assign
+- 맞바꾸기 : swap, cont(swap(cont2)), std::swap(cont, cont2)
+- 복제 대입 : cont = cont2
+- 이동 대입 : cont = std::move(cont2)
+- containerAssignmentAndSwap.cpp
 
 ## 3.5 비교
+- 컨테이너 비교 연산자 : (==, !=, <, >, <=, >=)
+- containerComparison.cpp
