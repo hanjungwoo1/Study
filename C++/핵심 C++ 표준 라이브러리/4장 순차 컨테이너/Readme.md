@@ -26,3 +26,65 @@ arr[n];
 arr.at(n); // 경계 벗어나면 std::range-error 익셉션
 std::get<n>(arr); 
 ```
+
+## 4.2 벡터
+- 실행 시간에 길이 조정 가능
+- std:vector
+
+```C++
+std::vector<int> vec(10); // 열개
+std::vector<int> vec(10, 2023); // 2023 열개
+std::vector<int> vec{10, 2023}; // 10과 2023
+```
+
+### 4.2.1 크기 vs 용량
+
+|메서드|설명|
+|------|---|
+|vec.size()|vec 원소 개수|
+|vec.capacity()|vec에 대한 메모리를 더 할당받지 않고 가질 수 있는 원소의 개수|
+|vec.resize(n)|vec의 원소 개수가 n개로 증가|
+|vec.reverse(n)|원소를 최소한 n개 담는 데 필요한 메모리를 예약|
+|vec.shrink_to_fit()|vec의 용량을 크기에 맞게 줄인다|
+
+- vector.cpp
+
+|메서드|설명|
+|------|---|
+|vec.assing(...)|한 개 이상의 원소, 범위, 이니셜라이저 리스트를 대입|
+|vec.clear()|vec에 담긴 원소를 모두 삭제|
+|vec.emplace(pos, args ...)|pos 지점 바로 앞에 args로 지정한 원소를 vec에 새로 만들고, 생성된 원소의 위치를 리턴|
+|vec.emplace_back(args ...)|vec에 args로 지정한 원소를 새로 만든다|
+|vec.erase(...)|원소나 범위를 삭제하고 다음 위치를 리턴|
+|vec.insert(pos, ...)|원소, 범위, 이니셜라이저 리스트를 한 개 이상 추가하고, 그 위치를 리턴|
+|vec.pop_back()|마지막 원소를 삭제|
+|vec.push_back(elem)|elem의 복제본을 vec의 끝에 추가|
+
+## 4.3 덱
+
+- std::deque
+- deque.cpp
+
+## 4.4 리스트
+
+- std::list
+- 임의 접근(random access)을 지원하지 않음
+- 임의 접근 속도가 느림, 최악의 경우 원소 개수
+- 원소를 추가하거나 삭제 속도 빠름, 반복자가 해당 지점을 가르킬 경우
+- 원소를 추가하거나 삭제 할때마다 위치 조정
+- list.cpp
+
+|메서드|설명|
+|------|---|
+|lis.merge(c)|정렬된 리스트 c를 정렬된 리스트 lis와 합친다. 따라서 lis는 정렬된 상태를 유지|
+|lis.merge(c, op)|정렬된 리스트 c를 정렬된 리스트 lis와 합친다. 따라서 lis는 정렬된 상태를 유지, op를 정렬 기준으로 사용|
+|lis.remove(val)|lis에서 값이 val인 원소를 모두 삭제|
+|lis.remove_if(pre)|lis에서 pre라는 프레디케이트를 만족하는 원소를 모두 삭제|
+|lis.splice(pos, ...)|lis에서 pos 지점 앞에서 원소들을 나눈다. 이때 원소는 단일 원소일 수도 있고, 범위일 수도 있고, 리스트일 수도 있다|
+|lis.unique()|값이 같으면서 연달아 나온 원소를 제거|
+|lis.unique(pre)|pre 프레디케이트를 만족하면서 연달아 나온 원소를 제거|
+
+## 4.5 포워드 리스트
+
+
+!!!!!
