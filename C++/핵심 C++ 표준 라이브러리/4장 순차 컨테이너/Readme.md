@@ -86,5 +86,21 @@ std::vector<int> vec{10, 2023}; // 10과 2023
 
 ## 4.5 포워드 리스트
 
+- std::forward_list, 단일 연결 리스트
+- 메모리 사용 최소화
+- 반복자는 정방향으로만 진행, 역방향 불가능
+- 순차 컨테이너 중 유일하게 크기를 알 수 없음
+- forwardList.cpp
 
-!!!!!
+|메서드|설명|
+|------|---|
+|forw.before_begin()|첫 번째 원소 앞을 기리키는 반복자를 리턴|
+|forw.emplace_after(pos, args ...)|pos 지점 바로 뒤에 args로 지정한 원소를 생성|
+|forw.emplace_front(args ...)|forw의 시작점에 args로 지정한 원소를 생성|
+|forw.erase_after(pos, ...)|forw에서 pos 지점에 있는 원소나 pos에서 시작하는 범위를 삭제|
+|forw.insert_after(pos, ...)|pos 지점 뒤에 새 원소를 추가, 추가되는 원소는 하나 일 수도 있고 범위로 지정 가능, 이니셜라이저 리스트|
+|forw.merge(c)|정렬된 포워드 리스트 c를 정렬된 포워드 리스트 forw와 합친다. forw는 정렬된 상태를 유지|
+|forw.merge(c, op)|정렬된 포워드 리스트 c를 정렬된 포워드 리스트 forw와 합친다. op를 정렬 기준으로 사용|
+|forw.splice_after(pos, ...)|forw의 원소를 pos 지점을 기준으로 나눈다. 단일 원소일 수 도 있고, 범위 일 수도 있고, 리스트|
+|forw.unique()|인정한 원소 중에서 값이 같은 것을 제거|
+|forw.unique(pre)|프리디케이트 pre를 만족하는 입전한 원소를 제거|

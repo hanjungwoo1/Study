@@ -52,4 +52,60 @@
 정렬 연관 컨테이너에서 디폴트 비교 기준 - std::less
 
 
-### Test
+### 5.2.4 탐색 함수
+
+- 정렬 연관 컨테이너는 탐색에 최적화
+- associativeContainerSearch.cpp
+
+|탐색 함수|설명|
+|-------|---|
+|ordAssCont.count(key)|주어진 key에 연관된 값의 개수를 리턴|
+|ordAssCont.find(key)|ordAssCont에 주어진 key에 대한 반복자를 리턴, ordAssCont에 해당 key가 없다면 ordAssCont.end()를 리턴|
+|ordAssCont.lower_bound(key)|key를 추가할 ordAssCont에서 첫 번째 key에 대한 반복자를 리턴|
+|ordAssCont.upper_bound(key)|key를 추가할 ordAssCont에서 마지막 key의 위치를 리턴|
+|ordAssCont.equal_range(key)|ordAssCont.lower_bound(key)와 ordAssCont.upper_bound(key) 사이의 범위를 std::pair형태로 리턴|
+
+
+### 5.2.5 std::map
+
+- 가장 많이 사용되는 연관 컨테이너
+- 인덱스로 접근 가능
+- at 메서드 : std::out_of_range 익셉션 발생
+
+## 5.3 비정렬 연관 컨테이너
+
+### 5.3.1 개요
+
+- 정렬 연관 컨테이너보다, 인터페이스가 더 풍부하고 키가 정렬되지 않음
+- 두 가지 필요
+    - 키의 해시 값을 제공 : std::has&gt;key&lt;
+    - 키가 같은지를 비교 : std::equal_to&gt;key&lt;
+
+### 5.3.2 키와 값
+
+키
+- 동등 여부를 비교
+- 해시 값
+- 복제와 이동이 가능
+
+값
+- 디폴트 생성을 지원
+- 복제와 이동이 가능
+
+### 5.3.3. 성능
+
+- std::map VS std::unordered_map = 상수 VS 로그
+
+### 5.3.4 해시 함수
+
+- 불, 자연수, 부동소수점 수와 같은 기본 타입에 대해 기본적으로 제공
+- std::string과 std::wstring에서도 사용 가능
+- C 스트링인 const char 포인터 주소에 대해 해시 값을 생성
+- 사용자 정의 데이터 타입에 대해 정의
+- undorderedMapHash.cpp
+
+### 5.3.5 세부 사항
+
+- 비정렬 컨테이너는 인덱스를 버킷에 저장
+- 인덱스가 어떤 버킷을 가르킬지는 해시 함수가 결정
+- C++ 런타임은 로드 팩터가 1보다 클 때 버킷을 새로 만듦
