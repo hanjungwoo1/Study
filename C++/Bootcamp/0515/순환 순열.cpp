@@ -11,7 +11,6 @@ void InputData(){
 }
 
 int check(int num){
-
     for(int i=0; i<queue.size(); i++){
         if (queue[i] == num){
             return i+1;
@@ -20,45 +19,27 @@ int check(int num){
     return 0;
 }
 
-
 int solve(){
-
     int temp = N;
     int index = 0;
-
     while(1){
-
         temp = temp * N;
         temp %= P;
-        // cout << "Temp : " << temp << endl;
-
+        //cout << "Temp : " << temp << endl;
         index = check(temp);
 
         if (index!=0){
             break;
         }
         queue.push_back(temp);
-
     }
     return index;
 }
 
-
-
 int main(){
-    int ans = -1;
     InputData();// 입력받는 부분
 
     int index = solve();
-
-    // cout << "index : " << index << endl;
-    // cout << "end" << endl;
-
-    // for(int i=0; i<queue.size(); i++){
-    //     cout << queue[i] << endl;
-    // }
-
-
 
     cout << queue.size() - index + 1 << endl;// 출력하는 부분
     return 0;

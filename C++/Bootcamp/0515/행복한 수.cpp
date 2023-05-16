@@ -11,7 +11,6 @@ void InputData(){
 }
 
 int check(int num){
-
     for(int i=0; i<queue.size(); i++){
         if (queue[i] == num){
             return 1;
@@ -28,18 +27,14 @@ int make_sqaure(int num){
     for(auto data : str_data){
         int num = data-'0';
         result += num*num;
-    }
-    
+    }   
     return result;
 }
 
 void is_happy(int num){
 
-    int index = 0;
     int start_num = num;
-
     while(start_num!=1){
-
         // loop
         if(check(start_num)==1){
             //cout << "broke loop " << endl;
@@ -52,7 +47,6 @@ void is_happy(int num){
         start_num = make_sqaure(start_num);
         //cout << "num : " << start_num << endl;
     }
-
 }
 
 
