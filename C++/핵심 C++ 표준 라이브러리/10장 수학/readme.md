@@ -31,7 +31,6 @@ unDis(gen);
 
 - random.cpp
 
-
 ## c에서 물려받은 수학 함수
 
 &lt;cmath&gt;에 정의된 함수
