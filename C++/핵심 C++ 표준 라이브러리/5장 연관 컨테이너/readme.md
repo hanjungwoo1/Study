@@ -34,13 +34,13 @@
 
 ### 5.2.1 개요
 
-- std::map과 std::multimap은 키와 값을 연결, &gt;map&lt; 헤더에 정의
-- std::set과 std::multiset은 &gt;set&lt; 헤더에 정의
+- std::map과 std::multimap은 키와 값을 연결, &lt;map&gt; 헤더에 정의
+- std::set과 std::multiset은 &lt;set&gt; 헤더에 정의
 
 ### 5.2.2 키와 값
 
 키
-- 정렬 가능(디폴트 비교 기준은 &gt;)
+- 정렬 가능(디폴트 비교 기준은 &lt;)
 - 복제와 이동이 가능
 
 값

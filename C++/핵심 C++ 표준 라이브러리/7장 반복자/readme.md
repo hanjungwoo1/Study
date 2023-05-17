@@ -52,3 +52,24 @@ C++에서 제공하는 반복자는 정방향, 양방향, 임의 접근
 
 ### 7.4.1 추가 반복자
 
+- std::front_inserter : 컨테이너 시작
+- std::back_inserter : 컨테이너 끝
+- std::inserter : 컨테이너 임의의 지점
+
+|이름|내부적으로 사용하는 메서드|컨테이너|
+|---|---------------------|------|
+|std::front_inserter(val)|cont.push_front(val)|std::deque, std::list|
+|std::back_inserter(val)|cont.push_back(val)|std::vector, std::deque, std::list, std::string|
+|std::inserter(val, pos)|cont.insert(pos, val)|std::vector, std::deque, std::list, std::string, std::map, std::set|
+
+### 7.4.2 스트림 반복자
+
+- 스트림 반복자(stream iterator)는 스트림을 데이터 소스(data source) 또는 데이터 싱크(data sink)로 사용하는 반복자
+- C++은 입력 스트림(istream)과 출력 스트림(ostream)에 대한 반복자 생성 함수를 제공
+
+|함수|설명|
+|---|---|
+|std::istream_iterator&lt;T&gt;|스트림 끝 반복자를 생성|
+|std::istream_iterator&lt;T&gt;(istream)|istream에 대한 입력 스트림 반복자를 생성|
+|std::ostream_iterator&lt;T&gt;(ostream)|ostream에 대한 출력 스트림 반복자를 생성|
+|std::ostream_iterator&lt;T&gt;(ostream, delim)|구분자를 delim으로 사용하는 ostream에 대한 출력 스트림 반복자를 생성|
