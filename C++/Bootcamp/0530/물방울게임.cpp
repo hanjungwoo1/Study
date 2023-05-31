@@ -39,6 +39,7 @@ void dfs(int index, int drops, int skill_count){
     // 흡수 불가능
         dfs(index+1, drops, skill_count+1);    // Skill 2 -> 제거
         dfs(index, drops + drops-1, skill_count+1);    // Skill 1 -> 밑에 놈 흡수
+        
     }
 }
  
@@ -50,8 +51,11 @@ int main(){
         ans = INT_MAX;
         //여기서부터 작성
         sort(W, W+N);
-        dfs(0, A, 0);
- 
+        if (A==1){
+            ans = N;
+        }else{
+            dfs(0, A, 0);
+        }
         cout << "Case #" << t << ": " << ans << endl;//출력하는 부분
     }
     return 0;

@@ -28,8 +28,21 @@
 C 스트링을 C++ 스트링으로 변환하는 작업은 암묵적으로 처리되지만, C++ 스트링을 C 스트링으로 변환할 때는 명시적으로 메서드를 호출해야 한다. str.copy() 
 - stringCversusC++.cpp
 
-
 ## 11.3 크기 vs 용량
+
+str.size() &lt;= str.capacity() &lt;= str.max_size()
+
+|메서드|설명|
+|str.empty()|str에 원소가 있는지 검사|
+|str.size(), str.length()|str에 담긴 원소 개수를 리턴|
+|str.capacity()|str에 메모리를 다시 할당하지 않고 담을 수 있는 원소 개수를 리턴|
+|str.max_size()|str의 최대 길이를 리턴|
+|str.resize(n)|str의 길이를 n으로 변경|
+|str.reverse(n)|최소한 n개의 원소가 들어갈 메모리 공간을 예약|
+|str.shrink_to_fit()|스트링의 용량을 현재 크기로 맞춤|
+
+
+
 
 ## 11.4 비교
 
