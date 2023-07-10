@@ -16,14 +16,15 @@ void InputData() {
 
 void solve(){
     for (int i = 0; i < N; i++) {
-        while (!st.empty() && st.top() < str[i] && K > 0) {
+        while (!st.empty() && st.top() < str[i] && K > 0) {  
+            //cout<< "POP : " <<st.top()<<endl;
         st.pop();
         K--;
         }
         st.push(str[i]);
     }
 
-    while (!st.empty() && K > 0) {
+    while (!st.empty() && K > 0) { // 남았다면 POP
         st.pop();
         K--;
     }
