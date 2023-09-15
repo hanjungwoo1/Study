@@ -29,6 +29,18 @@ cmake --build build --config Debug
 // Ctrl + F5 -> Debug 
 ```
 
+- OpenGL의 특징
+    - Low-level API
+    - Cross-language
+    - Cross-platform
+    - Standard / Specification only
+        - Khronos Group에서 API 스펙을 관리
+        - 실제 OpenGL driver는 각 벤더에서 스펙에 맞게 개발
+
+
+
+
+
 </details>
 
 
